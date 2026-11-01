@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<title>FitTrack — Training Log</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#0b1220;--panel:#131e30;--panel2:#1a2940;--text:#f3f6fc;--muted:#9eacc2;--accent:#a3e635;--line:#293952;--danger:#ff7b7b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#0b1220,#101a2b 65%,#0b1220);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);padding:0 0 88px}
+header{padding:22px 18px 16px;position:sticky;top:0;z-index:5;background:#0b1220ee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:.3px;font-size:20px}.logo{display:grid;place-items:center;background:var(--accent);color:#101827;width:34px;height:34px;border-radius:11px;font-weight:900}
+.sub{color:var(--muted);font-size:12px;margin-top:3px}
+main{max-width:760px;margin:auto;padding:16px}
+.tabs{display:flex;gap:8px;margin:12px 0 18px;overflow:auto}.tab{border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:10px 15px;border-radius:12px;white-space:nowrap;font-weight:700}.tab.active{background:var(--accent);color:#101827;border-color:var(--accent)}
+.hero{background:linear-gradient(135deg,#243650,#17253a);border:1px solid #30425e;border-radius:20px;padding:18px;margin-bottom:16px}.heroTop{display:flex;justify-content:space-between;gap:12px;align-items:center}.eyebrow{color:var(--accent);font-size:11px;font-weight:900;letter-spacing:1.3px;text-transform:uppercase}.hero h1{font-size:25px;margin:5px 0}.hero p{color:#b9c6d8;margin:0;font-size:13px}.pill{background:#0b1424;border:1px solid #34445e;padding:7px 10px;border-radius:20px;font-size:12px;color:var(--accent);font-weight:800}
+.progressWrap{margin-top:16px}.progressLabel{display:flex;justify-content:space-between;color:#c4cfde;font-size:12px;margin-bottom:7px}.bar{height:8px;background:#0d1726;border-radius:20px;overflow:hidden}.bar div{height:100%;width:0;background:var(--accent);border-radius:20px;transition:width .2s}
+.sectionTitle{display:flex;justify-content:space-between;align-items:center;margin:20px 2px 10px}.sectionTitle h2{font-size:16px;margin:0}.sectionTitle span{color:var(--muted);font-size:12px}
+.exercise{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px;margin:10px 0}.exHead{display:flex;gap:10px;align-items:flex-start}.check{width:24px;height:24px;accent-color:var(--accent);flex-shrink:0;margin-top:2px}.exName{font-weight:800;font-size:15px;flex:1}.exMeta{color:var(--muted);font-size:12px;margin-top:3px}.yt{font-size:12px;color:var(--accent);text-decoration:none;font-weight:700;display:inline-block;margin-top:8px}
+.sets{margin-top:12px;display:grid;gap:7px}.setRow{display:grid;grid-template-columns:42px 1fr 1fr;gap:8px;align-items:center}.setNum{font-size:12px;color:var(--muted);font-weight:700}.field label{display:block;font-size:10px;color:var(--muted);margin:0 0 4px 2px}.field input{width:100%;background:#0b1422;border:1px solid #2b3b55;color:var(--text);border-radius:9px;padding:10px;font-size:14px;outline:none}.field input:focus{border-color:var(--accent)}
+.actions{display:flex;gap:9px;margin:16px 0}.btn{border:0;border-radius:12px;padding:12px 15px;font-weight:800;font-size:13px;cursor:pointer}.primary{background:var(--accent);color:#101827;flex:1}.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}
+.bottomNav{position:fixed;bottom:0;left:0;right:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#0b1220ed;border-top:1px solid var(--line);display:flex;justify-content:center;gap:8px;z-index:10}.navBtn{flex:1;max-width:180px;background:transparent;color:var(--muted);border:0;border-radius:12px;padding:10px;font-weight:800}.navBtn.active{background:var(--panel2);color:var(--accent)}
+.statGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:14px}.stat strong{font-size:22px;display:block}.stat small{font-size:11px;color:var(--muted)}
+.historyItem{background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:14px;margin:9px 0}.historyItem strong{display:block}.historyItem small{color:var(--muted)}
+textarea{width:100%;background:#0b1422;border:1px solid var(--line);color:var(--text);border-radius:12px;padding:12px;min-height:90px;font:inherit}
+.notice{color:var(--muted);font-size:12px;line-height:1.5;margin:14px 2px}
+.timer{display:flex;align-items:center;justify-content:space-between;background:#101b2d;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:12px 0}.timer strong{font-size:20px;font-variant-numeric:tabular-nums}
+@media(min-width:600px){.sets{grid-template-columns:1fr 1fr}.exercise{padding:17px}.hero h1{font-size:29px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">F</div> FitTrack</div><div class="sub">Your training. Your progress. Stored on this device.</div></header>
+<main id="app"></main>
+<nav class="bottomNav">
+<button class="navBtn active" data-page="workout">🏋️ Workout</button>
+<button class="navBtn" data-page="progress">📈 Progress</button>
+<button class="navBtn" data-page="history">🗓 History</button>
+</nav>
+<script>
+const plans={
+"Monday — Chest + Triceps":[
+["Incline Dumbbell Press",3,10,"https://www.youtube.com/results?search_query=incline+dumbbell+press+proper+form"],
+["Machine Chest Press",3,10,"https://www.youtube.com/results?search_query=machine+chest+press+proper+form"],
+["Cable Chest Fly",3,12,"https://www.youtube.com/results?search_query=cable+chest+fly+proper+form"],
+["Triceps Rope Pushdown",3,12,"https://www.youtube.com/results?search_query=triceps+rope+pushdown+proper+form"],
+["Overhead Triceps Extension",2,12,"https://www.youtube.com/results?search_query=overhead+triceps+extension+proper+form"]],
+"Tuesday — Back + Biceps":[
+["Lat Pulldown",3,10,"https://www.youtube.com/results?search_query=lat+pulldown+proper+form"],
+["Seated Cable Row",3,10,"https://www.youtube.com/results?search_query=seated+cable+row+proper+form"],
+["One-arm Dumbbell Row",3,10,"https://www.youtube.com/results?search_query=one+arm+dumbbell+row+proper+form"],
+["Dumbbell Biceps Curl",3,12,"https://www.youtube.com/results?search_query=dumbbell+biceps+curl+proper+form"],
+["Hammer Curl",2,12,"https://www.youtube.com/results?search_query=hammer+curl+proper+form"]],
+"Wednesday — Recovery":[
+["Brisk Walk",1,30,"https://www.youtube.com/results?search_query=beginner+brisk+walking+fitness"],
+["Gentle Mobility",1,8,"https://www.youtube.com/results?search_query=beginner+full+body+mobility+routine"]],
+"Thursday — Shoulders + Abs":[
+["Seated Dumbbell Shoulder Press",3,10,"https://www.youtube.com/results?search_query=seated+dumbbell+shoulder+press+proper+form"],
+["Dumbbell Lateral Raise",3,12,"https://www.youtube.com/results?search_query=dumbbell+lateral+raise+proper+form"],
+["Reverse Pec Deck / Rear Delt Fly",3,12,"https://www.youtube.com/results?search_query=reverse+pec+deck+proper+form"],
+["Plank",3,30,"https://www.youtube.com/results?search_query=plank+proper+form+beginner"],
+["Dead Bug",3,10,"https://www.youtube.com/results?search_query=dead+bug+core+exercise+proper+form"]],
+"Friday — Full Body":[
+["Leg Press",3,12,"https://www.youtube.com/results?search_query=leg+press+proper+form"],
+["Machine Chest Press",3,10,"https://www.youtube.com/results?search_query=machine+chest+press+proper+form"],
+["Lat Pulldown",3,10,"https://www.youtube.com/results?search_query=lat+pulldown+proper+form"],
+["Dumbbell Romanian Deadlift",3,10,"https://www.youtube.com/results?search_query=dumbbell+romanian+deadlift+proper+form"],
+["Dumbbell Biceps Curl",2,12,"https://www.youtube.com/results?search_query=dumbbell+biceps+curl+proper+form"]],
+"Saturday — Cardio":[
+["Incline Treadmill Walk",1,25,"https://www.youtube.com/results?search_query=incline+treadmill+walking+beginner+form"]],
+"Sunday — Rest":[]
+};
+const STORE="fittrack_v1";
+let data=JSON.parse(localStorage.getItem(STORE)||'{"sessions":{},"notes":{}}');
+let page="workout",day=new Date().getDay();
+const dayNames=["Sunday — Rest","Monday — Chest + Triceps","Tuesday — Back + Biceps","Wednesday — Recovery","Thursday — Shoulders + Abs","Friday — Full Body","Saturday — Cardio"];
+let selectedDay=dayNames[day];
+const today=()=>new Date().toISOString().slice(0,10);
+function save(){localStorage.setItem(STORE,JSON.stringify(data))}
+function sessionKey(){return today()+"|"+selectedDay}
+function current(){return data.sessions[sessionKey()]||(data.sessions[sessionKey()]={items:{},notes:""})}
+function render(){
+ document.querySelectorAll(".navBtn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ const app=document.getElementById("app");
+ if(page==="workout")renderWorkout(app); else if(page==="progress")renderProgress(app);else renderHistory(app);
+}
+function renderWorkout(app){
+ const exercises=plans[selectedDay]||[];
+ let s=current(), done=exercises.filter((e,i)=>s.items[i]?.done).length;
+ app.innerHTML=`<div class="tabs">${Object.keys(plans).map(d=>`<button class="tab ${d===selectedDay?'active':''}" data-day="${d}">${d.split(" — ")[0]}</button>`).join("")}</div>
+ <section class="hero"><div class="heroTop"><div><div class="eyebrow">Today's session</div><h1>${selectedDay}</h1><p>${exercises.length? "Focus on controlled reps and good technique.":"Recovery day — recharge."}</p></div><span class="pill">${done}/${exercises.length} DONE</span></div>
+ <div class="progressWrap"><div class="progressLabel"><span>Session progress</span><span>${exercises.length?Math.round(done/exercises.length*100):100}%</span></div><div class="bar"><div style="width:${exercises.length?done/exercises.length*100:100}%"></div></div></div></section>
+ ${exercises.length?`<div class="sectionTitle"><h2>Exercise checklist</h2><span>Tick when completed</span></div>`:`<div class="exercise"><strong>Rest and recover 🌿</strong><p class="notice">Light walking or stretching is optional. Recovery is part of progress.</p></div>`}
+ ${exercises.map((e,i)=>exerciseCard(e,i,s.items[i]||{})).join("")}
+ <div class="sectionTitle"><h2>Session notes</h2><span>Auto-saved</span></div><textarea id="notes" placeholder="Energy, form, PRs, discomfort, anything to remember…">${s.notes||""}</textarea>
+ <div class="actions"><button class="btn primary" id="finish">✓ Save session</button><button class="btn secondary" id="reset">Reset day</button></div>
+ <div class="notice">Weights are recorded per set. For bodyweight exercises, leave weight blank and enter reps or seconds. Data stays in this browser on this device.</div>`;
+ app.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{selectedDay=b.dataset.day;render()});
+ app.querySelectorAll("[data-item]").forEach(el=>el.onchange=ev=>{
+  const [idx,field,set]=el.dataset.item.split("|"); let item=s.items[idx]||(s.items[idx]={sets:{}});
+  if(field==="done")item.done=ev.target.checked;
+  else {item.sets[set]||(item.sets[set]={});item.sets[set][field]=ev.target.value;}
+  save();render();
+ });
+ document.getElementById("notes").oninput=e=>{s.notes=e.target.value;save()};
+ document.getElementById("finish").onclick=()=>{s.finishedAt=new Date().toISOString();save();alert("Session saved on this device 💪");};
+ document.getElementById("reset").onclick=()=>{if(confirm("Clear this workout's logged sets and checkboxes?")){delete data.sessions[sessionKey()];save();render()}};
+}
+function exerciseCard(e,i,logged){
+ let [name,nsets,target,url]=e,sets=logged.sets||{};
+ return `<article class="exercise"><div class="exHead"><input class="check" type="checkbox" data-item="${i}|done|" ${logged.done?"checked":""}><div style="flex:1"><div class="exName">${name}</div><div class="exMeta">${nsets} sets × ${target}${name==="Plank"?" sec":" reps"} target</div><a class="yt" href="${url}" target="_blank" rel="noopener">▶ Watch form on YouTube ↗</a></div></div>
+ <div class="sets">${Array.from({length:nsets},(_,j)=>{let v=sets[j]||{};return `<div class="setRow"><span class="setNum">SET ${j+1}</span><div class="field"><label>Weight (kg)</label><input inputmode="decimal" type="number" min="0" step="0.5" placeholder="e.g. 10" value="${v.weight||""}" data-item="${i}|weight|${j}"></div><div class="field"><label>${name==="Plank"?"Time (sec)":"Reps"}</label><input inputmode="numeric" type="number" min="0" step="1" placeholder="${target}" value="${v.reps||""}" data-item="${i}|reps|${j}"></div></div>`}).join("")}</div></article>`;
+}
+function allSessions(){return Object.entries(data.sessions).filter(([k,v])=>v.finishedAt||Object.values(v.items||{}).some(x=>x.done))}
+function renderProgress(app){
+ let sessions=allSessions(), completed=sessions.reduce((a,[k,v])=>a+Object.values(v.items||{}).filter(x=>x.done).length,0);
+ let weeks=new Set(sessions.map(([k])=>{let d=new Date(k.split("|")[0]);d.setDate(d.getDate()-d.getDay());return d.toISOString().slice(0,10)})).size;
+ let weightEntries=[];sessions.forEach(([k,v])=>Object.values(v.items||{}).forEach(item=>Object.values(item.sets||{}).forEach(set=>{if(set.weight)weightEntries.push(Number(set.weight))})));
+ app.innerHTML=`<div class="hero"><div class="eyebrow">Your consistency</div><h1>Progress 📈</h1><p>Every completed set is a step forward.</p></div>
+ <div class="statGrid"><div class="stat"><strong>${sessions.length}</strong><small>Sessions logged</small></div><div class="stat"><strong>${completed}</strong><small>Exercises checked</small></div><div class="stat"><strong>${weeks}</strong><small>Active weeks</small></div></div>
+ <div class="sectionTitle"><h2>Training tips</h2></div><div class="exercise"><p>• When you hit all target reps with clean form, increase weight slightly next time.</p><p>• Track the same exercise consistently to compare progress.</p><p>• Scale weight is only one metric. Also track waist measurement and monthly photos.</p></div>
+ <div class="sectionTitle"><h2>Export / backup</h2></div><div class="exercise"><p class="notice">Your data is stored in this browser. Export a backup before clearing browser data or changing phones.</p><div class="actions"><button class="btn primary" id="export">⬇ Export backup (JSON)</button><button class="btn secondary" id="import">Import</button><input id="file" type="file" accept="application/json" hidden></div></div>
+ <div class="sectionTitle"><h2>Privacy</h2></div><p class="notice">No account, server, or cloud sync. Your workout logs remain in this browser's local storage. Use Export regularly to back them up.</p>`;
+ document.getElementById("export").onclick=()=>{let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="fittrack-backup-"+today()+".json";a.click();URL.revokeObjectURL(a.href)};
+ document.getElementById("import").onclick=()=>document.getElementById("file").click();
+ document.getElementById("file").onchange=async e=>{try{let f=e.target.files[0];if(!f)return;let imported=JSON.parse(await f.text());if(imported.sessions){data=imported;save();render();alert("Backup imported!")}else alert("Invalid backup file")}catch{alert("Could not import file")}};
+}
+function renderHistory(app){
+ let sessions=allSessions().sort(([a],[b])=>b.localeCompare(a));
+ app.innerHTML=`<div class="hero"><div class="eyebrow">Your logbook</div><h1>Training history</h1><p>Review previous workouts and notes.</p></div>
+ ${sessions.length?sessions.map(([key,s])=>{let [date,day]=key.split("|"),done=Object.values(s.items||{}).filter(x=>x.done).length;return `<div class="historyItem"><strong>${day}</strong><small>${date} · ${done} exercises completed ${s.finishedAt?"· Session saved":""}</small>${s.notes?`<p class="notice">${escapeHTML(s.notes)}</p>`:""}</div>`}).join(""):`<div class="exercise">No sessions yet. Start your first workout today 💪</div>`}
+ <div class="notice">History is saved locally on this device and browser.</div>`;
+}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+document.querySelectorAll(".navBtn").forEach(b=>b.onclick=()=>{page=b.dataset.page;render()});
+render();
+if("serviceWorker" in navigator && location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
